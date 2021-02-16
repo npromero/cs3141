@@ -150,10 +150,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ee64b6be2ed26045b110824af608ec1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  columns: 6
-  rows: 6
-  tileSize: 1.05
-  tile: {fileID: 1861962829293624227, guid: 065e750b10c41a84b800ac9df803d91d, type: 3}
+  columns: 5
+  rows: 5
+  tileSize: 1
+  tileFile: {fileID: 1861962829293624227, guid: 065e750b10c41a84b800ac9df803d91d,
+    type: 3}
 --- !u!4 &374822694
 Transform:
   m_ObjectHideFlags: 0
