@@ -14,11 +14,6 @@ public class tile : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-      
-        if (Input.GetMouseButtonDown(0))
-        {
-           tileRenderer.GetComponent<Renderer>().material.color = Color.red;
-        }
-        
+    
     }
 }
