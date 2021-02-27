@@ -18,10 +18,10 @@ public class Ship : MonoBehaviour
     /**
      * Struct to maintain the coordinate position of a ship
      */
-    private struct Position : int
+    private struct Position
     {
-        public double X { get; set; }
-        public double Y { get; set; }
+        public int X { get; set; }
+        public int Y { get; set; }
 
         public Position(int x, int y)
         {
@@ -31,9 +31,9 @@ public class Ship : MonoBehaviour
     }
 
     // Main ship variables
-    public int length { get; };
+    public int length { get; }
     private Position front;                         // The coordinates of the front of the ship
-    public Orientation orientation { get; set; };   // What direction the ship is facing
+    private Orientation orientation { get; set; }   // What direction the ship is facing
     private bool[] damagedSections;                // Which locations have been damaged (True if section has been damaged, false otherwise)
 
     /**
@@ -96,7 +96,9 @@ public class Ship : MonoBehaviour
     private int positionOnShip(int xPos, int yPos)
     {
         List<Position> positions = getShipPositions();
-        return positions.IndexOf(position => position.X == xPos && position.Y == yPos);
+        Position positionToFind = new Position(xPos, yPos);
+
+        return positions.IndexOf(positionToFind);
     }
 
     private List<Position> getShipPositions()
@@ -109,25 +111,25 @@ public class Ship : MonoBehaviour
 
         switch (orientation)
         {
-            case North:
+            case Orientation.North:
                 // Ship is vertical; get y coordinates from top to bottom, x coordinate stays the same
                 xDir = 0;
                 yDir = 1;
                 break;
-            case South:
+            case Orientation.South:
                 // Ship is vertical; get y coordinates from bottom to top, x coordinate stays the same
                 xDir = 0;
                 yDir = -1;
                 break;
-            case East:
+            case Orientation.East:
                 // Ship is horizontal; get x coordinates from right to left, y coordinate stays the same
                 xDir = -1;
                 yDir = 0;
                 break;
-            case West:
+            case Orientation.West:
                 // Ship is horizontal; get x coordinates from left to right, y coordinate stays the same
                 xDir = 1;
-                yDir  0;
+                yDir = 0;
                 break;
         }
 
@@ -139,6 +141,11 @@ public class Ship : MonoBehaviour
         }
 
         return positions;
+    }
+
+    public int getOrientation()
+    {
+        return (int) orientation;
     }
 
     // Start is called before the first frame update
