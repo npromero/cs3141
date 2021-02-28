@@ -32,9 +32,26 @@ public class Ship : MonoBehaviour
 
     // Main ship variables
     public int length { get; }
-    private Position front;                         // The coordinates of the front of the ship
+    private Position frontPosition;                         // The coordinates of the front of the ship
+
+    public int x { 
+        get
+        {
+            return frontPosition.X;
+        }
+    }
+    public int y
+    {
+        get
+        {
+            return frontPosition.Y;
+        }
+    } 
+
     private Orientation orientation { get; set; }   // What direction the ship is facing
     private bool[] damagedSections;                // Which locations have been damaged (True if section has been damaged, false otherwise)
+
+    public SpriteRenderer shipRenderer;
 
     /**
      * Constructor
@@ -47,8 +64,8 @@ public class Ship : MonoBehaviour
     public Ship(int shipLength, int xLocation, int yLocation, int orientation)
     {
         length = shipLength;
-        front.X = xLocation;
-        front.Y = yLocation;
+        frontPosition.X = xLocation;
+        frontPosition.Y = yLocation;
         this.orientation = (Orientation)orientation;
         damagedSections = new bool[length];
 
@@ -133,8 +150,8 @@ public class Ship : MonoBehaviour
                 break;
         }
 
-        int tempX = front.X;
-        int tempY = front.Y;
+        int tempX = frontPosition.X;
+        int tempY = frontPosition.Y;
         for (int i = 0; i < length; i++)
         {
             positions.Insert(i, new Position { X = (tempX + xDir), Y = (tempY + yDir) });
@@ -151,7 +168,7 @@ public class Ship : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        //shipRenderer = 
     }
 
     // Update is called once per frame
