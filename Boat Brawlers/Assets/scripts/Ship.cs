@@ -5,17 +5,6 @@ using UnityEngine;
 public class Ship : MonoBehaviour
 {
     /**
-     * Enum to keep track of a ship's orientation
-     */
-    private enum Orientation : int
-    {
-        North = 0,
-        East = 1,
-        South = 2,
-        West = 3
-    }
-
-    /**
      * Struct to maintain the coordinate position of a ship
      */
     private struct Position
@@ -46,12 +35,15 @@ public class Ship : MonoBehaviour
         {
             return frontPosition.Y;
         }
-    } 
+    }
 
-    private Orientation orientation { get; set; }   // What direction the ship is facing
-    private bool[] damagedSections;                // Which locations have been damaged (True if section has been damaged, false otherwise)
+    //public Vector2 frontPosition;
 
-    public SpriteRenderer shipRenderer;
+    private int orientation { get; set; }           // What direction the ship is facing
+    private bool[] damagedSections;                 // Which locations have been damaged (True if section has been damaged, false otherwise)
+
+    public GameObject ship;
+    public bool repositionAllowed;                  // Used to keep track of whether or not the game allows for the ships to be repositioned
 
     /**
      * Constructor
@@ -59,15 +51,16 @@ public class Ship : MonoBehaviour
      * @param int shipLength        The length of the ship
      * @param int xLocation         X coordinate of the front of the ship
      * @param int yLocation         Y coordinate of the front of the ship
-     * @param int orientation       The direction the ship is facing (0=North, 1=East, 2=South, 3=West)
+     * @param int orientation       The direction the ship is facing (0=North, 90=East, 180=South, 270=West)
      */
     public Ship(int shipLength, int xLocation, int yLocation, int orientation)
     {
         length = shipLength;
         frontPosition.X = xLocation;
         frontPosition.Y = yLocation;
-        this.orientation = (Orientation)orientation;
+        this.orientation = orientation;
         damagedSections = new bool[length];
+        repositionAllowed = true;
 
         // Start the ship with no damage taken
         for (int i = 0; i < length; i++)
@@ -128,22 +121,22 @@ public class Ship : MonoBehaviour
 
         switch (orientation)
         {
-            case Orientation.North:
+            case 0:
                 // Ship is vertical; get y coordinates from top to bottom, x coordinate stays the same
                 xDir = 0;
                 yDir = 1;
                 break;
-            case Orientation.South:
+            case 180:
                 // Ship is vertical; get y coordinates from bottom to top, x coordinate stays the same
                 xDir = 0;
                 yDir = -1;
                 break;
-            case Orientation.East:
+            case 90:
                 // Ship is horizontal; get x coordinates from right to left, y coordinate stays the same
                 xDir = -1;
                 yDir = 0;
                 break;
-            case Orientation.West:
+            case 270:
                 // Ship is horizontal; get x coordinates from left to right, y coordinate stays the same
                 xDir = 1;
                 yDir = 0;
@@ -160,20 +153,33 @@ public class Ship : MonoBehaviour
         return positions;
     }
 
-    public int getOrientation()
+    public bool isDragging;
+
+    void OnMouseDown()
     {
-        return (int) orientation;
+        isDragging = true;
+    }
+
+    void OnMouseUp()
+    {
+        isDragging = false;
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        //shipRenderer = 
+        transform.position = new Vector2(0, 0);
+        ship = (GameObject) Instantiate(ship, transform);
     }
+
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (repositionAllowed && isDragging)
+        {
+            Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
+            transform.Translate(mousePosition);
+        }
     }
 }
