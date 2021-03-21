@@ -74,9 +74,9 @@ public class Ship : MonoBehaviour
      * 
      * @param xPos  x position being attacked
      * @param yPos  y position being attacked
-     * @return      True if the ship is still alive, false otherwise
+     * @return int  The length of the ship if it was sunk, -1 otherwise
      */
-    public bool Attack(int xPos, int yPos)
+    public int Attack(int xPos, int yPos)
     {
         // Check if this attack is on a section of the ship
         int damageLocationIdx = positionOnShip(xPos, yPos);
@@ -89,11 +89,11 @@ public class Ship : MonoBehaviour
         {
             if (!(damagedSections[i]))
             {
-                return true;
+                return -1;
             }
         }
 
-        return false;
+        return length;
     }
 
     /**
@@ -163,23 +163,36 @@ public class Ship : MonoBehaviour
     void OnMouseUp()
     {
         isDragging = false;
+
+        // @todo
+        // Lock the ship to the closest tile
+        transform.position = new Vector3(frontPosition.X % 5, frontPosition.Y % 5, 0);
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        transform.position = new Vector2(0, 0);
-        ship = (GameObject) Instantiate(ship, transform);
+        transform.position = new Vector3(0, 0, -1);
+        ship = (GameObject)Instantiate(ship, transform);
     }
 
 
     // Update is called once per frame
     void Update()
     {
-        if (repositionAllowed && isDragging)
+        if (repositionAllowed)
         {
-            Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
-            transform.Translate(mousePosition);
+            if (isDragging)
+            {
+                Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition) - new Vector3(transform.position.x, transform.position.y, 0);
+                transform.Translate(mousePosition);
+            }
+
+            if (Input.GetKeyDown("r"))
+            {
+                transform.Rotate(0, 0, 90);
+                Debug.Log("R key was pressed!");
+            }
         }
     }
 }
