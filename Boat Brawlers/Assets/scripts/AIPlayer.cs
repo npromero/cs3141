@@ -5,6 +5,11 @@ using System;
 
 public class AIPlayer : MonoBehaviour
 {
+
+    public GameObject player1;
+    //private grid grid;
+    private GameObject[,] map;
+
     public string difficulty;
     public double difficultyPercent;
     
@@ -19,20 +24,43 @@ public class AIPlayer : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        selectDifficulty("hard");
+        selectDifficulty("e");
         setup();
+        // TEST CODE
+        //Tuple<int,int> coords = randomAttackLocation();
     }
+    
+    //Test code
+    int hitOnEven = 0;
+    void OnMouseDown()
+    {
+        hitOnEven++;
+        SpriteRenderer tileRenderer = GetComponent<SpriteRenderer>();
+        if (hitOnEven % 2 == 0)
+        {
+            tileRenderer.color = new Color(1, 0, 0, 1);
+        }
+        else
+        {
+            tileRenderer.color = new Color(1, 1, 1, 1);
+        }
+    }
+    //end Test code
 
-    bool running = false;
+    bool firstTime = true;
     // Update is called once per frame
     void Update()
     {
-        if (running == false)
+        if (firstTime==true)
         {
-            Console.WriteLine("TEST");
-            running = true;
+            firstTime = false;
+            map = player1.GetComponent<grid>().getGrid();
+        }
+
+        // Test code should run on turn in final product
+        if (Input.GetMouseButtonDown(1))
+        {
             chooseAttack();
-            running = false;
         }
     }
 
@@ -92,24 +120,40 @@ public class AIPlayer : MonoBehaviour
 
     void updateProb( int x, int y)
     {
-        if (x > -1 && x < 10 && y > -1 && y < 10)
+        if (x > -1 && x < gridSize && y > -1 && y < gridSize && gridProbability[x, y] != -1)
         {
             int sum = 0;
             if (x != 0)
             {
                 sum += gridData[x - 1, y];
+                if (x > 1 && gridData[x - 2, y]==2)
+                {
+                    sum++;
+                }
             }
-            if (x != 9)
+            if (x != (gridSize - 1))
             {
                 sum += gridData[x + 1, y];
+                if (x < (gridSize-2) && gridData[x + 2, y] == 2)
+                {
+                    sum++;
+                }
             }
             if (y != 0)
             {
                 sum += gridData[x, y - 1];
+                if (y > 1 && gridData[x, y-2] == 2)
+                {
+                    sum++;
+                }
             }
-            if (y != 9)
+            if (y != (gridSize - 1))
             {
                 sum += gridData[x, y + 1];
+                if (y < (gridSize - 2) && gridData[x, y + 2] == 2)
+                {
+                    sum++;
+                }
             }
             gridProbability[x, y] = sum;
         }
@@ -190,36 +234,35 @@ public class AIPlayer : MonoBehaviour
         if (rnd.NextDouble() > difficultyPercent)
         {
             location = randomAttackLocation();
+            Debug.Log("random\n"); //Test code
         }
         else
         {
             location = smartAttackLocation();
+            Debug.Log("smart\n"); //Test code
         }
 
-        // fire at location
         bool hit;
-        /*
-        // temp code for testing
-        Console.WriteLine(String.Format("({0},{1}) - Enter 1 for hit, anything else for miss:",location.Item1,location.Item2));
-        int readChar = Console.Read();
-        if (readChar == 49)
-        {
-            hit = true;
+        // fire at location
+        // In future hits will use acctual data.
+        if (hitOnEven % 2 == 0)
+        { 
+            hit = true; 
         }
         else
         {
             hit = false;
         }
-        //end of temp code for testing
-        */
         //Update gridData and gridProbibility
         if (hit)
         {
             gridData[location.Item1, location.Item2] = 2;
+            map[location.Item1, location.Item2].GetComponent<SpriteRenderer>().color = new Color(1, 0, 0, 1); //Test code
         }
         else
         {
             gridData[location.Item1, location.Item2] = 0;
+            map[location.Item1, location.Item2].GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1); //Test code
         }
         gridProbability[location.Item1, location.Item2] = -1;
         updateProb(location.Item1-1, location.Item2);
