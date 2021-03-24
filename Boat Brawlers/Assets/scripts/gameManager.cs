@@ -27,5 +27,5 @@ public class gameManager : MonoBehaviour
      * currentTurn = 1 means that player 1 can fire at a ship
      * currentTurn = 2 means that player 2 can fire at a ship
      */
-    public static int currentTurn = 1;
+    public static int currentTurn = 1; // current turn for getting shot at
 }

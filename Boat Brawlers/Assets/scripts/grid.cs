@@ -11,6 +11,7 @@ public class grid : MonoBehaviour
 {
     public int xStart, yStart;
     public int columns,rows;
+    public int player;
     public float tileSize;
     public GameObject tileFile;
     public GameObject[,] gridMap;

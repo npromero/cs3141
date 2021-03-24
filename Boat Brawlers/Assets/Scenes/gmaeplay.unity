@@ -154,8 +154,9 @@ MonoBehaviour:
   yStart: -3
   columns: 5
   rows: 5
+  player: 0
   tileSize: 1
-  tileFile: {fileID: 8640391700351515629, guid: 7780102fbef4fe8428d7a9f996a5d486,
+  tileFile: {fileID: 8650078736383200831, guid: 05200a4d33191f342813dcb0c94cb732,
     type: 3}
 --- !u!4 &760456868
 Transform:
@@ -287,8 +288,9 @@ MonoBehaviour:
   yStart: -3
   columns: 5
   rows: 5
+  player: 0
   tileSize: 1
-  tileFile: {fileID: 8640391700351515629, guid: 7780102fbef4fe8428d7a9f996a5d486,
+  tileFile: {fileID: 4611842573953361838, guid: b361bf053656e46489aadeadc9103204,
     type: 3}
 --- !u!4 &1170389108
 Transform:
