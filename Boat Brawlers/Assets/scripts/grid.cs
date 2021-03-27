@@ -13,9 +13,11 @@ public class grid : MonoBehaviour
     public int columns,rows;
     public float tileSize;
     public GameObject tileFile;
+    public GameObject[,] gridMap;
     // Start is called before the first frame update
     void Start()
     {
+        gridMap = new GameObject[columns, rows];
         GenerateGrid();  
     }
 
@@ -23,6 +25,10 @@ public class grid : MonoBehaviour
     void Update()
     {
         
+    }
+    public GameObject[,] getGrid()
+    {
+        return gridMap;
     }
     /*
      *The method creates the grid of tiles with specified starting cordinates, size of grid and the size of each tile
@@ -35,9 +41,10 @@ public class grid : MonoBehaviour
             for (int cols = 0; cols < columns; cols++)
             {
                 GameObject tiles =  (GameObject) Instantiate(tileFile, transform);
-                float x = xStart + cols * tileSize;
-                float y = yStart + row * -tileSize;
+                float x = (cols * tileSize) + xStart;
+                float y = (row * -tileSize) - yStart;
                 tiles.transform.position = new Vector2(x, y);
+                gridMap[cols, row] = tiles;
                 tiles = null;
             }
         }
