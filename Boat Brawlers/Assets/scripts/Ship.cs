@@ -21,21 +21,21 @@ public class Ship : MonoBehaviour
 
     // Main ship variables
     public int length { get; }
-    private Position frontPosition;                         // The coordinates of the front of the ship
+    //private Position frontPosition;                         // The coordinates of the front of the ship
 
-    public int x { 
-        get
-        {
-            return frontPosition.X;
-        }
-    }
-    public int y
-    {
-        get
-        {
-            return frontPosition.Y;
-        }
-    }
+    //public int x { 
+    //    get
+    //    {
+    //        return frontPosition.X;
+    //    }
+    //}
+    //public int y
+    //{
+    //    get
+    //    {
+    //        return frontPosition.Y;
+    //    }
+    //}
 
     //public Vector2 frontPosition;
 
@@ -43,7 +43,6 @@ public class Ship : MonoBehaviour
     private bool[] damagedSections;                 // Which locations have been damaged (True if section has been damaged, false otherwise)
 
     public GameObject ship;
-    public bool repositionAllowed;                  // Used to keep track of whether or not the game allows for the ships to be repositioned
 
     /**
      * Constructor
@@ -53,14 +52,11 @@ public class Ship : MonoBehaviour
      * @param int yLocation         Y coordinate of the front of the ship
      * @param int orientation       The direction the ship is facing (0=North, 90=East, 180=South, 270=West)
      */
-    public Ship(int shipLength, int xLocation, int yLocation, int orientation)
+    public Ship(int shipLength, int orientation)
     {
         length = shipLength;
-        frontPosition.X = xLocation;
-        frontPosition.Y = yLocation;
         this.orientation = orientation;
         damagedSections = new bool[length];
-        repositionAllowed = true;
 
         // Start the ship with no damage taken
         for (int i = 0; i < length; i++)
@@ -143,11 +139,10 @@ public class Ship : MonoBehaviour
                 break;
         }
 
-        int tempX = frontPosition.X;
-        int tempY = frontPosition.Y;
+        Vector3 pos = transform.position;
         for (int i = 0; i < length; i++)
         {
-            positions.Insert(i, new Position { X = (tempX + xDir), Y = (tempY + yDir) });
+            positions.Insert(i, new Position { X = ((int) pos.x + xDir), Y = ((int) pos.y + yDir) });
         }
 
         return positions;
@@ -163,16 +158,12 @@ public class Ship : MonoBehaviour
     void OnMouseUp()
     {
         isDragging = false;
-
-        // @todo
-        // Lock the ship to the closest tile
-        transform.position = new Vector3((int) transform.position.x, (int) transform.position.y, 0);
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        transform.position = new Vector3(0, 0, -1);
+        isDragging = false;
         ship = (GameObject)Instantiate(ship, transform);
     }
 
@@ -180,19 +171,20 @@ public class Ship : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (repositionAllowed)
+        if (gameManager.gameStage == 0)
         {
             if (isDragging)
             {
                 Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition) - new Vector3(transform.position.x, transform.position.y, 0);
-                frontPosition.X = (int) mousePosition.x;
-                frontPosition.Y = (int) mousePosition.y;
-                transform.Translate(mousePosition);
-            }
+                Vector3 shipPos = transform.position;
+                shipPos.x = (int) mousePosition.x;
+                shipPos.y = (int) mousePosition.y;
+                transform.Translate(new Vector2((int) shipPos.x, (int) shipPos.y));
 
-            if (Input.GetKeyDown("r"))
-            {
-                transform.Rotate(0, 0, 90);
+                if (Input.GetKeyDown("r"))
+                {
+                    transform.Rotate(0, 0, 90);
+                }
             }
         }
     }
