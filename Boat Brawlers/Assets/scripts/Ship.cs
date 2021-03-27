@@ -166,7 +166,7 @@ public class Ship : MonoBehaviour
 
         // @todo
         // Lock the ship to the closest tile
-        transform.position = new Vector3(frontPosition.X % 5, frontPosition.Y % 5, 0);
+        transform.position = new Vector3((int) transform.position.x, (int) transform.position.y, 0);
     }
 
     // Start is called before the first frame update
@@ -185,13 +185,14 @@ public class Ship : MonoBehaviour
             if (isDragging)
             {
                 Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition) - new Vector3(transform.position.x, transform.position.y, 0);
+                frontPosition.X = (int) mousePosition.x;
+                frontPosition.Y = (int) mousePosition.y;
                 transform.Translate(mousePosition);
             }
 
             if (Input.GetKeyDown("r"))
             {
                 transform.Rotate(0, 0, 90);
-                Debug.Log("R key was pressed!");
             }
         }
     }
