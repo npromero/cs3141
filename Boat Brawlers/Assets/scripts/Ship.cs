@@ -127,6 +127,11 @@ public class Ship : MonoBehaviour
         isDragging = false;
     }
 
+    void OnCollisionStay(Collision collide)
+    {
+        Debug.Log("Collided with" + collide.gameObject.name);
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -157,7 +162,8 @@ public class Ship : MonoBehaviour
             // Make sure the ship is exactly vertical or horizontal
             if (transform.rotation.eulerAngles.z % 90 != 0)
             {
-                transform.rotation = Quaternion.Euler(0, 0, 0);
+                // Snap the value back to being exactly horizontal or vertical
+                transform.rotation = Quaternion.Euler(0, 0, (int) (transform.rotation.eulerAngles.z / 90) * 90);
             }
         }
     }
