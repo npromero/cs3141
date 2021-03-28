@@ -24,28 +24,8 @@ public class AIPlayer : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        selectDifficulty("e");
-        setup();
-        // TEST CODE
-        //Tuple<int,int> coords = randomAttackLocation();
+        selectDifficulty("impossible",10);
     }
-    
-    //Test code
-    int hitOnEven = 0;
-    void OnMouseDown()
-    {
-        hitOnEven++;
-        SpriteRenderer tileRenderer = GetComponent<SpriteRenderer>();
-        if (hitOnEven % 2 == 0)
-        {
-            tileRenderer.color = new Color(1, 0, 0, 1);
-        }
-        else
-        {
-            tileRenderer.color = new Color(1, 1, 1, 1);
-        }
-    }
-    //end Test code
 
     bool firstTime = true;
     // Update is called once per frame
@@ -56,20 +36,15 @@ public class AIPlayer : MonoBehaviour
             firstTime = false;
             map = player1.GetComponent<grid>().getGrid();
         }
-
-        // Test code should run on turn in final product
-        if (Input.GetMouseButtonDown(1))
-        {
-            chooseAttack();
-        }
     }
 
     /**
      * Choose the difficulty for the AI
      * 
      * @param string difficulty     The difficutly level of the AI (e.g. "easy", "medium", "hard")
+     * @param int gridSize     The size of the grid
      */
-    void selectDifficulty(string difficulty)
+    public void selectDifficulty(string difficulty, int gridSize)
     {
         this.difficulty = difficulty;
         if (String.Compare("easy", difficulty, StringComparison.OrdinalIgnoreCase) == 0)
@@ -88,34 +63,40 @@ public class AIPlayer : MonoBehaviour
         {
             difficultyPercent = 1.0;
         }
+        setup(gridSize);
     }
 
-    void setup()
+    void setup(int size)
     {
-        gridData = new int[,] { 
-            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }, 
-            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }, 
-            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }, 
-            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }, 
-            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }, 
-            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }, 
-            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }, 
-            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }, 
-            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }, 
-            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 } };
+        gridData = new int[size, size];
+        for (int i = 0; i < size; i++)
+        {
+            for (int j = 0; j < size; j++)
+            {
+                gridData[i, j] = 1;
+            }
+        }
 
-        gridProbability  = new int[,] { 
-            { 2, 3, 3, 3, 3, 3, 3, 3, 3, 2 }, 
-            { 3, 4, 4, 4, 4, 4, 4, 4, 4, 3 }, 
-            { 3, 4, 4, 4, 4, 4, 4, 4, 4, 3 }, 
-            { 3, 4, 4, 4, 4, 4, 4, 4, 4, 3 }, 
-            { 3, 4, 4, 4, 4, 4, 4, 4, 4, 3 }, 
-            { 3, 4, 4, 4, 4, 4, 4, 4, 4, 3 }, 
-            { 3, 4, 4, 4, 4, 4, 4, 4, 4, 3 }, 
-            { 3, 4, 4, 4, 4, 4, 4, 4, 4, 3 }, 
-            { 3, 4, 4, 4, 4, 4, 4, 4, 4, 3 }, 
-            { 2, 3, 3, 3, 3, 3, 3, 3, 3, 2 } };
-        gridSize = 10;
+        gridProbability = new int[size, size];
+        gridProbability[0, 0] = 2;
+        gridProbability[(size - 1), 0] = 2;
+        gridProbability[0, (size - 1)] = 2;
+        gridProbability[(size - 1), (size - 1)] = 2;
+        for (int i=1; i<size-1; i++)
+        {
+            gridProbability[i, 0] = 3;
+            gridProbability[i, size - 1] = 3;
+            gridProbability[0, i] = 3;
+            gridProbability[size - 1, i] = 3;
+        }
+        for (int i = 1; i < size-1; i++)
+        {
+            for (int j = 1; j < size-1; j++)
+            {
+                gridProbability[i, j] = 4;
+            }
+        }
+        gridSize = size;
     }
 
     void updateProb( int x, int y)
@@ -126,33 +107,33 @@ public class AIPlayer : MonoBehaviour
             if (x != 0)
             {
                 sum += gridData[x - 1, y];
-                if (x > 1 && gridData[x - 2, y]==2)
+                if (x > 1 && gridData[x - 1, y] == 2 && gridData[x - 2, y]==2)
                 {
-                    sum++;
+                    sum+=4;
                 }
             }
             if (x != (gridSize - 1))
             {
                 sum += gridData[x + 1, y];
-                if (x < (gridSize-2) && gridData[x + 2, y] == 2)
+                if (x < (gridSize-2) && gridData[x + 1, y] == 2 && gridData[x + 2, y] == 2)
                 {
-                    sum++;
+                    sum+=4;
                 }
             }
             if (y != 0)
             {
                 sum += gridData[x, y - 1];
-                if (y > 1 && gridData[x, y-2] == 2)
+                if (y > 1 && gridData[x, y -1] == 2 && gridData[x, y-2] == 2)
                 {
-                    sum++;
+                    sum+=4;
                 }
             }
             if (y != (gridSize - 1))
             {
                 sum += gridData[x, y + 1];
-                if (y < (gridSize - 2) && gridData[x, y + 2] == 2)
+                if (y < (gridSize - 2) && gridData[x , y + 1] == 2 && gridData[x, y + 2] == 2)
                 {
-                    sum++;
+                    sum+=4;
                 }
             }
             gridProbability[x, y] = sum;
@@ -245,14 +226,7 @@ public class AIPlayer : MonoBehaviour
         bool hit;
         // fire at location
         // In future hits will use acctual data.
-        if (hitOnEven % 2 == 0)
-        { 
-            hit = true; 
-        }
-        else
-        {
-            hit = false;
-        }
+        hit = false;
         //Update gridData and gridProbibility
         if (hit)
         {
@@ -262,7 +236,7 @@ public class AIPlayer : MonoBehaviour
         else
         {
             gridData[location.Item1, location.Item2] = 0;
-            map[location.Item1, location.Item2].GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1); //Test code
+            map[location.Item1, location.Item2].GetComponent<SpriteRenderer>().color = new Color(0, 0, 1, 1); //Test code
         }
         gridProbability[location.Item1, location.Item2] = -1;
         updateProb(location.Item1-1, location.Item2);
