@@ -4,40 +4,8 @@ using UnityEngine;
 
 public class Ship : MonoBehaviour
 {
-    /**
-     * Struct to maintain the coordinate position of a ship
-     */
-    private struct Position
-    {
-        public int X { get; set; }
-        public int Y { get; set; }
-
-        public Position(int x, int y)
-        {
-            X = x;
-            Y = y;
-        }
-    }
-
     // Main ship variables
     public int length { get; }
-    //private Position frontPosition;                         // The coordinates of the front of the ship
-
-    //public int x { 
-    //    get
-    //    {
-    //        return frontPosition.X;
-    //    }
-    //}
-    //public int y
-    //{
-    //    get
-    //    {
-    //        return frontPosition.Y;
-    //    }
-    //}
-
-    //public Vector2 frontPosition;
 
     private int orientation { get; set; }           // What direction the ship is facing
     private bool[] damagedSections;                 // Which locations have been damaged (True if section has been damaged, false otherwise)
@@ -101,48 +69,47 @@ public class Ship : MonoBehaviour
      */
     private int positionOnShip(int xPos, int yPos)
     {
-        List<Position> positions = getShipPositions();
-        Position positionToFind = new Position(xPos, yPos);
+        List<Vector2> positions = getShipPositions();
+        Vector2 positionToFind = new Vector2(xPos, yPos);
 
         return positions.IndexOf(positionToFind);
     }
 
-    private List<Position> getShipPositions()
+    private List<Vector2> getShipPositions()
     {
         // Depending on the direction, we need to track how much to
         // increase or decrease the x and y values while travsersing the ship
-        int xDir = 0;
-        int yDir = 0;
-        List <Position> positions = new List<Position>();
+        Vector2 facingDir = new Vector2(0, 0);
+        List <Vector2> positions = new List<Vector2>();
 
         switch (orientation)
         {
             case 0:
                 // Ship is vertical; get y coordinates from top to bottom, x coordinate stays the same
-                xDir = 0;
-                yDir = 1;
+                facingDir.x = 0;
+                facingDir.y = 1;
                 break;
             case 180:
                 // Ship is vertical; get y coordinates from bottom to top, x coordinate stays the same
-                xDir = 0;
-                yDir = -1;
+                facingDir.x = 0;
+                facingDir.y = -1;
                 break;
             case 90:
                 // Ship is horizontal; get x coordinates from right to left, y coordinate stays the same
-                xDir = -1;
-                yDir = 0;
+                facingDir.x = -1;
+                facingDir.y = 0;
                 break;
             case 270:
                 // Ship is horizontal; get x coordinates from left to right, y coordinate stays the same
-                xDir = 1;
-                yDir = 0;
+                facingDir.x = 1;
+                facingDir.y = 0;
                 break;
         }
 
         Vector3 pos = transform.position;
         for (int i = 0; i < length; i++)
         {
-            positions.Insert(i, new Position { X = ((int) pos.x + xDir), Y = ((int) pos.y + yDir) });
+            positions.Insert(i, new Vector2((int)pos.x + facingDir.x, (int)pos.y + facingDir.y));
         }
 
         return positions;
@@ -185,6 +152,12 @@ public class Ship : MonoBehaviour
                 {
                     transform.Rotate(0, 0, 90);
                 }
+            }
+
+            // Make sure the ship is exactly vertical or horizontal
+            if (transform.rotation.eulerAngles.z % 90 != 0)
+            {
+                transform.rotation = Quaternion.Euler(0, 0, 0);
             }
         }
     }
