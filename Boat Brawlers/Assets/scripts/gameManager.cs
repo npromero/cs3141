@@ -7,9 +7,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class gameManager : MonoBehaviour
 {
+    public TextMeshProUGUI Round;
     /*
      * gameStage didctaes what actions are avaible.
      * gameStage = 0 means the game is in the placement stage
@@ -28,4 +30,23 @@ public class gameManager : MonoBehaviour
      * currentTurn = 2 means that player 2 can fire at a ship
      */
     public static int currentTurn = 1; // current turn for getting shot at
+
+    private string displayRound;
+
+    void start()
+    {
+        displayRound = "something: " + round.ToString();
+        Round = GetComponent<TextMeshProUGUI>();
+        Round.text = displayRound;
+    }
+    
+    void Update()
+    {
+        displayRound = "Round: " + round.ToString();
+        Round.text = displayRound;
+    }
+    
+       
+
+ 
 }

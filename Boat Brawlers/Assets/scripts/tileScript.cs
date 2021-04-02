@@ -33,6 +33,7 @@ public class tileScript : MonoBehaviour
             else 
             {
                 gameManager.currentTurn = 1;
+                gameManager.round = gameManager.round + 1;
             }
         }
         
