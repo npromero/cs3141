@@ -10,7 +10,8 @@ public class Ship : MonoBehaviour
     private int orientation { get; set; }           // What direction the ship is facing
     private bool[] damagedSections;                 // Which locations have been damaged (True if section has been damaged, false otherwise)
 
-    public GameObject ship;
+	private GameObject player;
+	private GameObject[,] board;
 
     /**
      * Constructor
@@ -115,6 +116,25 @@ public class Ship : MonoBehaviour
         return positions;
     }
 
+	/**
+	 * Helper method to restric ships to only move between the ship spawn and the grid
+	 *
+	 * @param pos	The position to move the ship
+	 */
+	private void moveShip(Vector2 pos)
+	{
+		// TODO: put limitations on how far up, left, and right the ship can be placed.
+		transform.position = new Vector2((int) pos.x, (int) pos.y);
+
+		// For some reason this places the ship off place by .5 on each axis
+		// Temporary fix:
+		transform.Translate(new Vector2(-0.5f, -0.5f));
+
+		// Make sure the ship is in line with the grid:
+		Vector2 shipPos = transform.position;
+		
+	}
+
     public bool isDragging;
 
     void OnMouseDown()
@@ -127,19 +147,31 @@ public class Ship : MonoBehaviour
         isDragging = false;
     }
 
-    void OnCollisionStay(Collision collide)
+    void OnCollisionStay(Collision collision)
     {
-        Debug.Log("Collided with" + collide.gameObject.name);
+        Debug.Log("Collided with" + collision.gameObject.name);
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        isDragging = false;
-        ship = (GameObject)Instantiate(ship, transform);
+		isDragging = false;
+
+		player = GameObject.Find("player1");
+		board = player.GetComponent<grid>().getGrid();
+//		Debug.Log("Board piece: " + board[0,0]);
+//		Vector2 ULHCPos = board[0,0].transform.position;
+
+		// TODO: DEBUG LOG
+		//Debug.Log("Top left corner position:" + ULHCPos.x + ", " + ULHCPos.y);
     }
 
-
+	/* TODO List
+	* - [x]	Fix rotation error
+	* - [ ] Lock the ship to the grid
+	* - [ ]	Stop ship collisions
+	*/
+	
     // Update is called once per frame
     void Update()
     {
@@ -147,17 +179,16 @@ public class Ship : MonoBehaviour
         {
             if (isDragging)
             {
-                Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition) - new Vector3(transform.position.x, transform.position.y, 0);
-                Vector3 shipPos = transform.position;
-                shipPos.x = (int) mousePosition.x;
-                shipPos.y = (int) mousePosition.y;
-                transform.Translate(new Vector2((int) shipPos.x, (int) shipPos.y));
+				// Get the current position of the mouse and set the ship to its position
+                Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition); 
+				moveShip(new Vector2(mousePosition.x, mousePosition.y));
 
                 if (Input.GetKeyDown("r"))
-                {
+				{
                     transform.Rotate(0, 0, 90);
                 }
-            }
+
+			}
 
             // Make sure the ship is exactly vertical or horizontal
             if (transform.rotation.eulerAngles.z % 90 != 0)
