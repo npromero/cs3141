@@ -11,10 +11,13 @@ public class tileScript : MonoBehaviour
 {
     public int player;
     public SpriteRenderer tileRenderer;
+    public bool beenShotAt,hasShip;
     // Start is called before the first frame update
     void Start()
     {
         tileRenderer = GetComponent<SpriteRenderer>();
+        beenShotAt = false;
+        hasShip = false;
     }
 
     void Update()
@@ -23,8 +26,9 @@ public class tileScript : MonoBehaviour
     }
     void OnMouseDown()
     {
-        if(player == gameManager.currentTurn)
+        if(player == gameManager.currentTurn && beenShotAt == false)
         {
+            beenShotAt = true;
             tileRenderer.color = new Color(1, 0, 0, 1);
             if(gameManager.currentTurn == 1)
             {
