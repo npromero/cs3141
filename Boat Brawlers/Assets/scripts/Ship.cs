@@ -5,11 +5,9 @@ using UnityEngine;
 public class Ship : MonoBehaviour
 {
     // Main ship variables
-    public int length { get; }
+    public int length;
 
-    private int orientation { get; set; }           // What direction the ship is facing
-    private bool[] damagedSections;                 // Which locations have been damaged (True if section has been damaged, false otherwise)
-
+    private bool[] damagedSections;	// Which locations have been damaged (True if section has been damaged, false otherwise)
 	private GameObject player;
 	private GameObject[,] board;
 
@@ -21,10 +19,8 @@ public class Ship : MonoBehaviour
      * @param int yLocation         Y coordinate of the front of the ship
      * @param int orientation       The direction the ship is facing (0=North, 90=East, 180=South, 270=West)
      */
-    public Ship(int shipLength, int orientation)
+    public Ship()
     {
-        length = shipLength;
-        this.orientation = orientation;
         damagedSections = new bool[length];
 
         // Start the ship with no damage taken
@@ -83,6 +79,7 @@ public class Ship : MonoBehaviour
         Vector2 facingDir = new Vector2(0, 0);
         List <Vector2> positions = new List<Vector2>();
 
+		int orientation = (int) transform.rotation.eulerAngles.z;
         switch (orientation)
         {
             case 0:
@@ -123,16 +120,15 @@ public class Ship : MonoBehaviour
 	 */
 	private void moveShip(Vector2 pos)
 	{
-		// TODO: put limitations on how far up, left, and right the ship can be placed.
-		transform.position = new Vector2((int) pos.x, (int) pos.y);
+		//transform.position = new Vector2((int) pos.x, (int) pos.y);
+		transform.position = new Vector2(pos.x, pos.y);
 
 		// For some reason this places the ship off place by .5 on each axis
 		// Temporary fix:
-		transform.Translate(new Vector2(-0.5f, -0.5f));
+		//transform.Translate(new Vector2(-0.5f, -0.5f));
 
 		// Make sure the ship is in line with the grid:
-		Vector2 shipPos = transform.position;
-		
+		// TODO
 	}
 
     public bool isDragging;
@@ -145,11 +141,13 @@ public class Ship : MonoBehaviour
     void OnMouseUp()
     {
         isDragging = false;
-    }
 
-    void OnCollisionStay(Collision collision)
-    {
-        Debug.Log("Collided with" + collision.gameObject.name);
+		// Snap the ship to the grid
+		Vector2 pos = transform.position;
+		transform.position = new Vector2(Mathf.Round(pos.x), Mathf.Round(pos.y));
+		transform.Translate(new Vector2(-0.5f, -0.5f));
+
+		// TODO: debug print
     }
 
     // Start is called before the first frame update
@@ -157,12 +155,12 @@ public class Ship : MonoBehaviour
     {
 		isDragging = false;
 
-		player = GameObject.Find("player1");
-		board = player.GetComponent<grid>().getGrid();
-//		Debug.Log("Board piece: " + board[0,0]);
-//		Vector2 ULHCPos = board[0,0].transform.position;
+		//player = GameObject.Find("player1");
+		//board = player.GetComponent<grid>().getGrid();
+		//Debug.Log("Board piece: " + board[0,0]);
+		//Vector2 ULHCPos = board[0,0].transform.position;
 
-		// TODO: DEBUG LOG
+		//// TODO: DEBUG LOG
 		//Debug.Log("Top left corner position:" + ULHCPos.x + ", " + ULHCPos.y);
     }
 
