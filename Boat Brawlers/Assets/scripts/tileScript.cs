@@ -9,13 +9,15 @@ using UnityEngine;
 
 public class tileScript : MonoBehaviour
 {
-    public int timesclicked;
+    public int player;
     public SpriteRenderer tileRenderer;
+    public bool beenShotAt,hasShip;
     // Start is called before the first frame update
     void Start()
     {
-        timesclicked = 0;
         tileRenderer = GetComponent<SpriteRenderer>();
+        beenShotAt = false;
+        hasShip = false;
     }
 
     void Update()
@@ -24,6 +26,20 @@ public class tileScript : MonoBehaviour
     }
     void OnMouseDown()
     {
-        tileRenderer.color = new Color(1, 0, 0, 1);
+        if(player == gameManager.currentTurn && beenShotAt == false)
+        {
+            beenShotAt = true;
+            tileRenderer.color = new Color(1, 0, 0, 1);
+            if(gameManager.currentTurn == 1)
+            {
+                gameManager.currentTurn = 2;
+            }
+            else 
+            {
+                gameManager.currentTurn = 1;
+                gameManager.round = gameManager.round + 1;
+            }
+        }
+        
     }
 }

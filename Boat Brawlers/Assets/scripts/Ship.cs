@@ -64,7 +64,7 @@ public class Ship : MonoBehaviour
      * @param yPos      The y coord to check
      * @return int      The index of the position on the ship, or -1 if the coordinate is not on the ship
      */
-    private int positionOnShip(int xPos, int yPos)
+    public int positionOnShip(int xPos, int yPos)
     {
         List<Vector2> positions = getShipPositions();
         Vector2 positionToFind = new Vector2(xPos, yPos);
@@ -123,10 +123,6 @@ public class Ship : MonoBehaviour
 		//transform.position = new Vector2((int) pos.x, (int) pos.y);
 		transform.position = new Vector2(pos.x, pos.y);
 
-		// For some reason this places the ship off place by .5 on each axis
-		// Temporary fix:
-		//transform.Translate(new Vector2(-0.5f, -0.5f));
-
 		// Make sure the ship is in line with the grid:
 		// TODO
 	}
@@ -146,30 +142,14 @@ public class Ship : MonoBehaviour
 		Vector2 pos = transform.position;
 		transform.position = new Vector2(Mathf.Round(pos.x), Mathf.Round(pos.y));
 		transform.Translate(new Vector2(-0.5f, -0.5f));
-
-		// TODO: debug print
     }
 
     // Start is called before the first frame update
     void Start()
     {
 		isDragging = false;
-
-		//player = GameObject.Find("player1");
-		//board = player.GetComponent<grid>().getGrid();
-		//Debug.Log("Board piece: " + board[0,0]);
-		//Vector2 ULHCPos = board[0,0].transform.position;
-
-		//// TODO: DEBUG LOG
-		//Debug.Log("Top left corner position:" + ULHCPos.x + ", " + ULHCPos.y);
     }
 
-	/* TODO List
-	* - [x]	Fix rotation error
-	* - [ ] Lock the ship to the grid
-	* - [ ]	Stop ship collisions
-	*/
-	
     // Update is called once per frame
     void Update()
     {

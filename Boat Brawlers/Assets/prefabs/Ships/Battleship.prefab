@@ -10,11 +10,11 @@ GameObject:
   m_Component:
   - component: {fileID: 535749625875636147}
   - component: {fileID: 7049057043018958623}
-  - component: {fileID: 2159737082846276519}
-  - component: {fileID: 3138648215881146428}
+  - component: {fileID: -6587019179919913936}
+  - component: {fileID: 4981610657747827749}
   - component: {fileID: 3681903036083142177}
   m_Layer: 8
-  m_Name: TestShipMedium
+  m_Name: Battleship
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -28,8 +28,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2597565587375010674}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -12, y: -12, z: 10}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 10}
+  m_LocalScale: {x: 0.5, y: 0.55, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -73,7 +73,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 53641911c9e6b8647829dfd975630bc6, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 23f15784e07b58f42968fe3d5eb35116, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -84,7 +84,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!50 &2159737082846276519
+--- !u!50 &-6587019179919913936
 Rigidbody2D:
   serializedVersion: 4
   m_ObjectHideFlags: 0
@@ -103,9 +103,9 @@ Rigidbody2D:
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 0
---- !u!61 &3138648215881146428
+--- !u!61 &4981610657747827749
 BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -122,14 +122,14 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.64, y: 2.56}
+    oldSize: {x: 2.4, y: 9.6}
     newSize: {x: 0.64, y: 1.28}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 2.4, y: 9.6}
   m_EdgeRadius: 0
 --- !u!114 &3681903036083142177
 MonoBehaviour:
