@@ -221,7 +221,7 @@ MonoBehaviour:
   columns: 10
   rows: 10
   player: 1
-  tileSize: 1
+  tileSize: 1.5
   tileFile: {fileID: 8650078736383200831, guid: 05200a4d33191f342813dcb0c94cb732,
     type: 3}
 --- !u!4 &760456868
@@ -366,7 +366,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a910e0700fae9984cb63e5b491f99c0e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player1: {fileID: 760456866}
+  player1: {fileID: 0}
   difficulty: 
   difficultyPercent: 0
 --- !u!4 &1051960086
@@ -488,12 +488,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ee64b6be2ed26045b110824af608ec1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  xStart: 15
+  xStart: 13
   yStart: -3
   columns: 10
   rows: 10
   player: 2
-  tileSize: 1
+  tileSize: 1.5
   tileFile: {fileID: 4611842573953361838, guid: b361bf053656e46489aadeadc9103204,
     type: 3}
 --- !u!4 &1170389108
