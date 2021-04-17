@@ -19,7 +19,7 @@ public class gameManager : MonoBehaviour
      * gameStage = 3 means that player 1 has won
      * gameStage = 4 means that player 2 has won
      */
-    public static int gameStage = 1;
+    public static int gameStage = 0;
     /*
      * The round is a variable for the end game screen to count how many rounds the game lasted.
      */

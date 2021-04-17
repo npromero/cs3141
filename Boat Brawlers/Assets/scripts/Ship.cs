@@ -141,7 +141,7 @@ public class Ship : MonoBehaviour
 		// Snap the ship to the grid
 		Vector2 pos = transform.position;
 		transform.position = new Vector2(Mathf.Round(pos.x), Mathf.Round(pos.y));
-		transform.Translate(new Vector2(-0.5f, -0.5f));
+		transform.Translate(new Vector2(-0.75f, -0.75f));
     }
 
     // Start is called before the first frame update
