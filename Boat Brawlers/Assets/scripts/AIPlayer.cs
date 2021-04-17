@@ -6,7 +6,7 @@ using System;
 public class AIPlayer : MonoBehaviour
 {
 
-    public GameObject player1;
+    public GameObject board;
     //private grid grid;
     private GameObject[,] map;
 
@@ -24,7 +24,7 @@ public class AIPlayer : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        selectDifficulty("impossible",10);
+        selectDifficulty("easy",10);
     }
 
     bool firstTime = true;
@@ -34,7 +34,13 @@ public class AIPlayer : MonoBehaviour
         if (firstTime==true)
         {
             firstTime = false;
-            map = player1.GetComponent<grid>().getGrid();
+            map = board.GetComponent<grid>().getGrid();
+        }
+        if (gameManager.gameStage == 1 && gameManager.currentTurn == 2 )
+        {
+            chooseAttack();
+            gameManager.currentTurn = 1;
+            gameManager.round = gameManager.round + 1;
         }
     }
 

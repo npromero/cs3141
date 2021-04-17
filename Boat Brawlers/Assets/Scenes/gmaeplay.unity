@@ -366,7 +366,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a910e0700fae9984cb63e5b491f99c0e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player1: {fileID: 0}
+  board: {fileID: 1170389106}
   difficulty: 
   difficultyPercent: 0
 --- !u!4 &1051960086
