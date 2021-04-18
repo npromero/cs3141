@@ -31,12 +31,14 @@ public class AIPlayer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (firstTime==true)
+        if (firstTime == true)
         {
             firstTime = false;
             map = board.GetComponent<grid>().getGrid();
         }
-        if (gameManager.gameStage == 1 && gameManager.currentTurn == 2 )
+        //test code:
+        // remove comments from next line once gamestage is implemented
+        if (/*gameManager.gameStage == 1 &&*/ gameManager.currentTurn == 2 )
         {
             chooseAttack();
             gameManager.currentTurn = 1;
@@ -231,18 +233,20 @@ public class AIPlayer : MonoBehaviour
 
         bool hit;
         // fire at location
+        tileScript tile = map[location.Item1, location.Item2].GetComponent<tileScript>();
         // In future hits will use acctual data.
-        hit = false;
+        hit = tile.hasShip;
+        tile.beenShotAt = true;
         //Update gridData and gridProbibility
         if (hit)
         {
             gridData[location.Item1, location.Item2] = 2;
-            map[location.Item1, location.Item2].GetComponent<SpriteRenderer>().color = new Color(1, 0, 0, 1); //Test code
+            tile.tileRenderer.sprite = tile.hitRenderer;
         }
         else
         {
             gridData[location.Item1, location.Item2] = 0;
-            map[location.Item1, location.Item2].GetComponent<SpriteRenderer>().color = new Color(0, 0, 1, 1); //Test code
+            tile.tileRenderer.sprite = tile.missRenderer;
         }
         gridProbability[location.Item1, location.Item2] = -1;
         updateProb(location.Item1-1, location.Item2);
