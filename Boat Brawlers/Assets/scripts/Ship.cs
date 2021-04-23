@@ -10,7 +10,7 @@ public class Ship : MonoBehaviour
 
     private bool[] damagedSections;	// Which locations have been damaged (True if section has been damaged, false otherwise)
 	private GameObject player;
-	private GameObject headTile;	// The tile the front of the ship is attached to
+	private Vector2 tilePos;	// The tile the front of the ship is attached to
 
     /**
      * Constructor
@@ -133,17 +133,17 @@ public class Ship : MonoBehaviour
     {
         isDragging = false;
 
-		if (headTile != null) {
+		if (tilePos != null) {
 			// The ship is on top of a tile; snap it to this position
-			Vector2 tilePos = headTile.transform.position;
 			transform.position = new Vector3(tilePos.x, tilePos.y, 0);
 		}
     }
 
-	void OnTriggerStay2D(Collider2D col) {
+	void OnTriggerEnter2D(Collider2D col) {
 		// If the ship is on the player 1 grid, snap it to the tile it is currently colliding with
 		if (col.gameObject.name == "tilePlayer1(Clone)") {
-			headTile = col.gameObject;
+			tilePos = col.gameObject.transform.position;
+			Debug.Log(tilePos);
 		}
 	}
 
