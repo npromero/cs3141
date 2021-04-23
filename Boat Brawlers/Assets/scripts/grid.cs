@@ -31,7 +31,9 @@ public class grid : MonoBehaviour
 
 		// Spawn ships for player 1
 		if (player == 1) {
-			SpawnShips();
+			SpawnPlayerShips();
+		} else {
+			SpawnAIShips();
 		}
     }
 
@@ -67,25 +69,20 @@ public class grid : MonoBehaviour
         transform.position = new Vector2(-gridW / 2 + tileSize / 2, gridH / 2 - tileSize / 2);
     }
 	
-	private void SpawnShips() {
+	private void SpawnPlayerShips() {
 		destroyer = (GameObject) Instantiate(destroyer, transform);
-		destroyer.transform.Translate(new Vector2(-3, -13));
-		destroyer.transform.Rotate(new Vector3(0, 0, 90));
 
 		carrier = (GameObject) Instantiate(carrier, transform);
-		carrier.transform.Translate(new Vector2(-7, -11));
-		carrier.transform.Rotate(new Vector3(0, 0, 90));
 
 		cruiser = (GameObject) Instantiate(cruiser, transform);
-		cruiser.transform.Translate(new Vector2(-11, -12));
 
 		battleship = (GameObject) Instantiate(battleship, transform);
-		battleship.transform.Translate(new Vector2(-7, -13));
-		battleship.transform.Rotate(new Vector3(0, 0, 90));
 
 		submarine = (GameObject) Instantiate(submarine, transform);
-		submarine.transform.Translate(new Vector2(-2, -11));
-		submarine.transform.Rotate(new Vector3(0, 0, 90));
+	}
+
+	private void SpawnAIShips() {
+		
 	}
    
 }

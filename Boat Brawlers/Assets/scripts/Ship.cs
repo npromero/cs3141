@@ -6,10 +6,11 @@ public class Ship : MonoBehaviour
 {
     // Main ship variables
     public int length;
+    public bool isDragging;
 
     private bool[] damagedSections;	// Which locations have been damaged (True if section has been damaged, false otherwise)
 	private GameObject player;
-	private GameObject[,] board;
+	private GameObject headTile;	// The tile the front of the ship is attached to
 
     /**
      * Constructor
@@ -72,7 +73,7 @@ public class Ship : MonoBehaviour
         return positions.IndexOf(positionToFind);
     }
 
-    private List<Vector2> getShipPositions()
+    public List<Vector2> getShipPositions()
     {
         // Depending on the direction, we need to track how much to
         // increase or decrease the x and y values while travsersing the ship
@@ -120,14 +121,8 @@ public class Ship : MonoBehaviour
 	 */
 	private void moveShip(Vector2 pos)
 	{
-		//transform.position = new Vector2((int) pos.x, (int) pos.y);
-		transform.position = new Vector2(pos.x, pos.y);
-
-		// Make sure the ship is in line with the grid:
-		// TODO
+		transform.position = new Vector3(pos.x, pos.y, 0);
 	}
-
-    public bool isDragging;
 
     void OnMouseDown()
     {
@@ -138,11 +133,19 @@ public class Ship : MonoBehaviour
     {
         isDragging = false;
 
-		// Snap the ship to the grid
-		Vector2 pos = transform.position;
-		transform.position = new Vector2(Mathf.Round(pos.x), Mathf.Round(pos.y));
-		transform.Translate(new Vector2(-0.75f, -0.75f));
+		if (headTile != null) {
+			// The ship is on top of a tile; snap it to this position
+			Vector2 tilePos = headTile.transform.position;
+			transform.position = new Vector3(tilePos.x, tilePos.y, 0);
+		}
     }
+
+	void OnTriggerStay2D(Collider2D col) {
+		// If the ship is on the player 1 grid, snap it to the tile it is currently colliding with
+		if (col.gameObject.name == "tilePlayer1(Clone)") {
+			headTile = col.gameObject;
+		}
+	}
 
     // Start is called before the first frame update
     void Start()
